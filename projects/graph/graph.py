@@ -204,15 +204,55 @@ class Graph:
         return shortestPath
 
 
+
+#############################################################################
+# This function returns all the possible paths without going through 
+# a sub-path that is included in another path.
+# However this is not required according to the test, which only one path
+# So therefore I choose the first element in the list to return
+#############################################################################
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        # Create a stack and push a path (list) containing starting vertex
+        ss = Stack()
+        ss.push([starting_vertex])
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+        # Create a set of visited vertices
+        ############################################################
+        # The definition of a visited vertex is one whose neighbors
+        # have been already entered in the stack before. The 
+        # neighbors are inside a path list
+        ############################################################
+        visited = set()
+
+        # Create variable to hold the different paths
+        pathList = []
+
+        while ss.size() > 0:
+            # pop the path (list) at the top of the stack
+            current_path = ss.pop()
+
+            # If the vertex at the end of the current path has not
+            # been visited then continue building the path forward
+            if current_path[-1] not in visited:
+                # mark as visited
+                visited.add(current_path[-1])
+                # push all neightbors and add to pathList if possible
+                for next_vert in self.get_neighbors(current_path[-1]):
+                    new_path = list(current_path)
+                    new_path.append(next_vert)
+                    ss.push(new_path)
+                    if new_path[0] == starting_vertex and new_path[-1] == destination_vertex:
+                        pathList.append(new_path) 
+
+        return pathList[0]
+
+
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -220,7 +260,28 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        # Create visited set if it does not exist
+        if visited == None:
+            visited = set()
+            self.dft_recursive(starting_vertex,visited)
+            return
+
+        # Base cases
+        if starting_vertex in visited:
+            return
+
+        # Recursive case
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
